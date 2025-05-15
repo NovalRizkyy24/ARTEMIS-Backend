@@ -30,8 +30,8 @@ app.use(express.static(path.join(__dirname, '..', 'Frontend', 'public')));
 
 // Menambahkan rute untuk halaman utama
 app.get('/', (req, res) => {
-  //res.send('Backend API running. Please access frontend via VM frontend.');
-  res.sendFile(path.join(__dirname, '..', 'Frontend', 'public', 'index.html'));  // Path ke frontend/index.html
+  res.send('Backend API running. Please access frontend via VM frontend.');
+ //res.sendFile(path.join(__dirname, '..', 'Frontend', 'public', 'index.html'));  // Path ke frontend/index.html
 });
 
 app.post('/upload', upload.single('file'), async (req, res) => {
@@ -46,13 +46,14 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     // Menyimpan data hewan ke database PostgreSQL, termasuk URL foto dari GCS
     await createDataHewan(nama_hewan, nama_latin, deskripsi, status_lindungi, wilayah, populasi, fileUrl);
 
-    // Menampilkan pesan sukses di halaman upload-satwa.html dan tetap di halaman tersebut
+    // Redirect dengan pesan sukses
     res.redirect('/upload-satwa.html?message=upload-success');
   } catch (error) {
     console.error(error);
-    res.status(500).send('❌ Gagal upload ke GCS atau simpan data ke database.');
+    res.redirect('/upload-satwa.html?message=upload-failed');  // Redirect dengan pesan gagal jika terjadi error
   }
 });
+
 
 // Rute untuk mengambil data hewan dari database
 app.get('/api/data-hewan', async (req, res) => {
@@ -69,17 +70,21 @@ app.get('/api/data-hewan', async (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  const loginResult = await loginUser(username, password);
+  try {
+    const loginResult = await loginUser(username, password);
 
-  if (loginResult.success) {
-    req.session.userId = loginResult.user.id;
-    req.session.role = loginResult.user.role;
-    res.redirect('/admin-dashboard.html');
-  } else {
-    res.status(401).send(loginResult.message); // Mengirimkan pesan jika login gagal
+    if (loginResult.success) {
+      req.session.userId = loginResult.user.id;
+      req.session.role = loginResult.user.role;
+      return res.json({ success: true, redirect: '/admin-dashboard.html' });
+    } else {
+      return res.json({ success: false, message: loginResult.message });
+    }
+  } catch (err) {
+    console.error('Login Error:', err);
+    return res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server' });
   }
 });
-
 
 // Rute untuk dashboard admin
 app.get('/dashboard-admin.html', (req, res) => {

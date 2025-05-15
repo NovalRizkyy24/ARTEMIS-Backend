@@ -1,0 +1,44 @@
+2025-05-12T14:38:35.807Z - Server started on http://0.0.0.0:3000
+2025-05-12T14:38:35.836Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-12T14:39:18.209Z - Server started on http://0.0.0.0:3000
+2025-05-12T14:39:18.237Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T15:10:05.162Z - Server started on http://0.0.0.0:3000
+2025-05-14T15:10:05.374Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T15:10:10.245Z - Request received for /
+2025-05-14T15:22:38.848Z - Server started on http://0.0.0.0:3000
+2025-05-14T15:22:38.896Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T15:23:36.503Z - Request received for /
+2025-05-14T15:30:04.607Z - Request received for /
+2025-05-14T15:30:54.546Z - Request received for /
+2025-05-14T15:31:09.842Z - Request received for /
+2025-05-14T15:37:15.455Z - Server started on http://0.0.0.0:3000
+2025-05-14T15:37:15.485Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T15:37:39.450Z - Request received for /
+2025-05-14T15:38:25.742Z - Server started on http://0.0.0.0:3000
+2025-05-14T15:38:25.775Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T15:40:58.396Z - Request received for /
+2025-05-14T15:44:53.008Z - Server started on http://0.0.0.0:3000
+2025-05-14T15:44:53.051Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T15:45:01.874Z - Request received for /
+2025-05-14T15:51:43.883Z - Server started on http://0.0.0.0:3000
+2025-05-14T15:51:43.916Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T15:52:12.757Z - API request received for /api/data-hewan
+2025-05-14T15:52:22.726Z - API request received for /api/data-hewan
+2025-05-14T15:52:23.713Z - API request received for /api/data-hewan
+2025-05-14T15:52:26.989Z - API request received for /api/data-hewan
+2025-05-14T15:53:21.660Z - Server started on http://0.0.0.0:3000
+2025-05-14T15:53:21.696Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T15:53:26.139Z - API request received for /api/data-hewan
+2025-05-14T15:57:35.984Z - Server started on http://0.0.0.0:3000
+2025-05-14T15:57:36.014Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T15:58:10.539Z - API request received for /api/data-hewan
+2025-05-14T15:59:01.853Z - API request received for /api/data-hewan
+2025-05-14T15:59:55.304Z - API request received for /upload
+2025-05-14T16:01:21.755Z - API request received for /api/data-hewan
+2025-05-14T16:01:23.956Z - API request received for /api/data-hewan
+2025-05-14T16:30:40.510Z - Server started on http://0.0.0.0:3000
+2025-05-14T16:30:40.560Z - ✅ Koneksi ke database berhasil: [object Object]
+2025-05-14T16:30:43.703Z - API request received for /api/data-hewan
+2025-05-14T16:30:44.698Z - API request received for /api/data-hewan
+2025-05-14T16:30:45.368Z - API request received for /api/data-hewan
+2025-05-14T16:30:47.557Z - API request received for /api/data-hewan
