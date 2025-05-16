@@ -162,9 +162,9 @@ app.get('/api/data-hewan', async (req, res) => {
 // Route to update animal data
 app.put('/api/data-hewan/:id', upload.single('new_image'), async (req, res) => {
     const { id } = req.params;
-    const { nama_hewan, nama_latin, deskripsi, status_lindungi, wilayah, populasi } = req.body;
+    const { nama_hewan, nama_latin, deskripsi, status_lindungi, wilayah, populasi, existing_image_url } = req.body;
 
-    let fileUrl = null;
+    let fileUrl = existing_image_url || null; // Use existing image URL if no new image is uploaded
 
     // If a new image was uploaded, upload it to GCS
     if (req.file) {
@@ -183,7 +183,7 @@ app.put('/api/data-hewan/:id', upload.single('new_image'), async (req, res) => {
             SET nama_hewan = $1, nama_latin = $2, deskripsi = $3, status_lindungi = $4, wilayah = $5, populasi = $6, urlfoto = $7
             WHERE id_hewan = $8
         `;
-        const values = [nama_hewan, nama_latin, deskripsi, status_lindungi, wilayah, populasi, fileUrl || null, id];
+        const values = [nama_hewan, nama_latin, deskripsi, status_lindungi, wilayah, populasi, fileUrl, id];
 
         await client.query(query, values);
         res.send('Animal updated successfully');
