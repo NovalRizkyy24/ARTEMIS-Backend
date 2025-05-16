@@ -160,23 +160,37 @@ app.get('/api/data-hewan', async (req, res) => {
 
 
 // Route to update animal data
-app.put('/api/data-hewan/:id', async (req, res) => {
-  const { id } = req.params;
-  const { nama_hewan, nama_latin, deskripsi, status_lindungi, wilayah, populasi } = req.body;
+app.put('/api/data-hewan/:id', upload.single('new_image'), async (req, res) => {
+    const { id } = req.params;
+    const { nama_hewan, nama_latin, deskripsi, status_lindungi, wilayah, populasi } = req.body;
 
-  try {
-    const query = `
-      UPDATE data_hewan
-      SET nama_hewan = $1, nama_latin = $2, deskripsi = $3, status_lindungi = $4, wilayah = $5, populasi = $6
-      WHERE id_hewan = $7
-    `;
-    const values = [nama_hewan, nama_latin, deskripsi, status_lindungi, wilayah, populasi, id];
-    await client.query(query, values);
-    res.send('Animal data updated successfully');
-  } catch (error) {
-    console.error('❌ Failed to update animal data:', error);
-    res.status(500).send('❌ Failed to update animal data');
-  }
+    let fileUrl = null;
+
+    // If a new image was uploaded, upload it to GCS
+    if (req.file) {
+        try {
+            // Upload the file to GCS
+            fileUrl = await uploadToGCS(req.file.path, req.file.originalname);
+        } catch (error) {
+            return res.status(500).send('Failed to upload image to GCS');
+        }
+    }
+
+    try {
+        // Update the animal data in the database
+        const query = `
+            UPDATE data_hewan
+            SET nama_hewan = $1, nama_latin = $2, deskripsi = $3, status_lindungi = $4, wilayah = $5, populasi = $6, urlfoto = $7
+            WHERE id_hewan = $8
+        `;
+        const values = [nama_hewan, nama_latin, deskripsi, status_lindungi, wilayah, populasi, fileUrl || null, id];
+
+        await client.query(query, values);
+        res.send('Animal updated successfully');
+    } catch (error) {
+        console.error('Error updating animal:', error);
+        res.status(500).send('Failed to update animal data');
+    }
 });
 
 
@@ -191,6 +205,23 @@ app.delete('/api/data-hewan/:id', async (req, res) => {
     console.error('❌ Failed to delete animal:', error);
     res.status(500).send('❌ Failed to delete animal');
   }
+});
+
+// Route to get animal data by ID
+app.get('/api/data-hewan/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const query = 'SELECT * FROM data_hewan WHERE id_hewan = $1';
+        const result = await client.query(query, [id]);
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]); // Send the first result as animal data
+        } else {
+            res.status(404).send('Animal not found');
+        }
+    } catch (error) {
+        console.error('❌ Failed to fetch animal:', error);
+        res.status(500).send('❌ Failed to fetch animal');
+    }
 });
 
 
