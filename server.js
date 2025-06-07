@@ -228,5 +228,5 @@ app.get('/api/data-hewan/:id', async (req, res) => {
 
 // Menjalankan server di port 3000
 app.listen(3000, () => {
-  console.log('🌐 Server berjalan di http://localhost:3000');
+  console.log('🌐 Server berjalan di http://34.2.144.113');
 });
