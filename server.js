@@ -224,6 +224,18 @@ app.get('/api/data-hewan/:id', async (req, res) => {
     }
 });
 
+// Rute untuk logout
+app.post('/logout', (req, res) => {
+  // Gunakan req.session.destroy() untuk menghapus sesi di server
+  req.session.destroy(err => {
+    if (err) {
+      // Jika ada error saat menghancurkan sesi
+      return res.status(500).json({ success: false, message: 'Gagal untuk logout.' });
+    }
+    // Mengirim respon sukses jika sesi berhasil dihancurkan
+    res.status(200).json({ success: true, message: 'Logout berhasil' });
+  });
+});
 
 
 // Menjalankan server di port 3000

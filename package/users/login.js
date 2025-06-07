@@ -1,36 +1,47 @@
 // Backend/package/users/login.js
-const { Client } = require('pg');
-require('dotenv').config(); // Untuk membaca file .env
 
-const client = new Client({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
+// 1. Impor pool dari file koneksi terpusat Anda.
+const pool = require('../db/connect'); 
 
-// Fungsi untuk memverifikasi login
+// Fungsi untuk memverifikasi login (VERSI TIDAK AMAN)
 const loginUser = async (username, password) => {
-  try {
-    await client.connect(); // Menyambungkan ke database PostgreSQL
-    const result = await client.query('SELECT * FROM users WHERE username = $1', [username]);
+  // Menggunakan pool, tidak perlu lagi client.connect() dan client.end()
+  const query = 'SELECT * FROM users WHERE username = $1';
+  const values = [username];
 
+  try {
+    // Langsung gunakan pool.query(). Ini lebih efisien.
+    const result = await pool.query(query, values);
+
+    // Cek apakah username ditemukan
     if (result.rows.length > 0) {
       const user = result.rows[0];
-      if (user.password === password) { // Untuk sementara, kita cek password secara langsung
-        return { success: true, user }; // Kembalikan data user jika login berhasil
+
+      // =================================================================
+      // PERINGATAN: Perbandingan password secara langsung ini SANGAT TIDAK AMAN.
+      if (user.password === password) { 
+      // =================================================================
+        
+        // Login berhasil. Kembalikan hanya data yang dibutuhkan untuk sesi.
+        return { 
+          success: true, 
+          user: { 
+            id: user.id_user, // sesuaikan dengan nama kolom ID Anda
+            role: user.role 
+          } 
+        };
       } else {
+        // Password salah
         return { success: false, message: 'Password salah' };
       }
     } else {
+      // Username tidak ditemukan
       return { success: false, message: 'Username tidak ditemukan' };
     }
   } catch (err) {
-    console.error('Error login:', err);
+    console.error('Error saat proses login:', err);
+    // Kembalikan pesan error yang generik ke pengguna
     return { success: false, message: 'Terjadi kesalahan pada server' };
-  } finally {
-    client.end(); // Menutup koneksi database
   }
 };
 

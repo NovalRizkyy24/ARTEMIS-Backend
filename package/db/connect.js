@@ -1,19 +1,33 @@
-  // backend/package/db/connect.js
-  const { Client } = require('pg');  // Mengimpor package pg
-  require('dotenv').config();  // Untuk membaca file .env
+// backend/package/db/connect.js
 
-  // Membuat koneksi ke PostgreSQL
-  const client = new Client({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-  });
+// 1. Ganti impor dari Client menjadi Pool
+const { Pool } = require('pg');
+require('dotenv').config();
 
-  // Menyambungkan ke database
-  client.connect()
-    .then(() => console.log('✅ Koneksi ke database PostgreSQL berhasil!'))
-    .catch(err => console.error('❌ Gagal koneksi ke database PostgreSQL:', err));
+// 2. Buat instance dari Pool, bukan Client. Konfigurasinya sama.
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  // Tambahan konfigurasi untuk production (jika diperlukan)
+  // ssl: {
+  //   rejectUnauthorized: false
+  // }
+});
 
-  module.exports = client;  // Mengekspor client untuk digunakan di file lain
+// 3. Hapus blok client.connect(). Pool akan mengelola koneksi secara otomatis.
+// Sebagai gantinya, kita bisa menambahkan listener untuk event 'connect' dan 'error'
+// untuk memonitor kesehatan pool. Ini opsional tapi praktik yang baik.
+
+pool.on('connect', () => {
+  console.log('✅ Klien baru terhubung ke pool database PostgreSQL!');
+});
+
+pool.on('error', (err, client) => {
+  console.error('❌ Terjadi error pada pool koneksi database:', err);
+});
+
+// 4. Ekspor pool, bukan client.
+module.exports = pool;
