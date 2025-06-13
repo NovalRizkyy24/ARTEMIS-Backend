@@ -5,9 +5,9 @@ require('dotenv').config();
 
 // Konfigurasi GCS
 const storage = new Storage({
-  keyFilename: path.join(__dirname, '..', '..', 'gcs-key.json'), // Path ke service account key
+  keyFilename: path.join(__dirname, '..', '..', 'brangkas-sumbul.json'), // Path ke service account key
 });
-const bucket = storage.bucket('ember-antipecah'); // Nama bucket Anda
+const bucket = storage.bucket('sumbul-gunshop'); // Nama bucket Anda
 
 // Fungsi untuk meng-upload file ke GCS
 const uploadToGCS = async (filePath, fileName) => {
