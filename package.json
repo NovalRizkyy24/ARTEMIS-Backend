@@ -28,5 +28,8 @@
     "nodemailer": "^7.0.3",
     "pg": "^8.16.0"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "tailwindcss": "^4.1.8"
+  }
 }
